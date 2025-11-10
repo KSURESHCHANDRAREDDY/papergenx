@@ -7,7 +7,7 @@ import axios from "axios";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import GenPaper from './pages/Genpaper';
+import GenPaper from './pages/GenPaper';
 import Pricing from './pages/Pricing';
 import About from './pages/About';
 axios.defaults.withCredentials = true;
