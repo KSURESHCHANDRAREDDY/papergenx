@@ -13,13 +13,21 @@ const app = express();
 app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cookieParser());
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+const allowedOrigins = [
+  process.env.FRONTEND_ORIGIN,
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 const client = new MongoClient(process.env.MONGO_URI);
 await client.connect();
-const db = client.db("papergenx");
+const dbName = process.env.DB_NAME || "papergenx";
+const db = client.db(dbName);
 const collect = db.collection("userdata");
+
+// 🩺 Health route for Render sanity checks
+app.get("/", (req, res) => res.send("✅ Backend running"));
 
 // 🔐 Auth middleware
 function gate(req, res, next) {
