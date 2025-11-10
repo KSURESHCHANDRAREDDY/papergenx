@@ -8,6 +8,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable"; // 🆕 For tabular formatting
 
 function GenPaper() {
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
   const [formData, setFormData] = useState({
     topic: "",
     classLevel: "",
@@ -45,7 +46,7 @@ function GenPaper() {
     dispatch(setloading(true));
 
     try {
-      const res = await axios.post("http://localhost:4000/genpaper", formData, {
+      const res = await axios.post(`${API}/genpaper`, formData, {
         withCredentials: true,
       });
 
