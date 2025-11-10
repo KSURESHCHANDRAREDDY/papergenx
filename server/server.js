@@ -19,6 +19,8 @@ const allowedOrigins = [
   "http://localhost:5173",
 ].filter(Boolean);
 app.use(cors({ origin: allowedOrigins, credentials: true }));
+// Handle preflight for all routes
+app.options("*", cors({ origin: allowedOrigins, credentials: true }));
 
 const client = new MongoClient(process.env.MONGO_URI);
 await client.connect();
@@ -35,7 +37,18 @@ app.get("/", (req, res) => res.send("✅ Backend running"));
 // 🔐 Auth middleware
 function gate(req, res, next) {
   const token = req.cookies.token;
-  if (!token) return res.status(401).json({ message: "No token provided" });
+  if (!token) {
+    // Temporary diagnostics (safe to leave in logs)
+    console.warn("Auth gate: No token cookie", {
+      origin: req.headers.origin,
+      referer: req.headers.referer,
+      path: req.path,
+      method: req.method,
+      cookieKeys: Object.keys(req.cookies || {}),
+      nodeEnv: process.env.NODE_ENV,
+    });
+    return res.status(401).json({ message: "No token provided" });
+  }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Invalid or expired token" });
