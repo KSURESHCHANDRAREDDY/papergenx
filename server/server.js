@@ -211,7 +211,7 @@ app.post("/logout", (req, res) => {
 app.get("/auth/google", (req, res) => {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI || "http://localhost:5173/auth/google/callback",
     response_type: "code",
     scope: "openid email profile",
     access_type: "offline",
@@ -265,10 +265,11 @@ app.get("/auth/google/callback", async (req, res) => {
 
     // Issue JWT cookie
     const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: isProd,
+      sameSite: isProd ? 'None' : 'Lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
