@@ -19,8 +19,6 @@ const allowedOrigins = [
   "http://localhost:5173",
 ].filter(Boolean);
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-// Handle preflight for all routes
-app.options("*", cors({ origin: allowedOrigins, credentials: true }));
 
 const client = new MongoClient(process.env.MONGO_URI);
 await client.connect();
