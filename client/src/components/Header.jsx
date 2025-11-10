@@ -9,6 +9,7 @@ function Header() {
   const [navOpen, setNavOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
@@ -23,7 +24,7 @@ function Header() {
   }, []);
 
   const handleLogout = async () => {
-    await axios.post("http://localhost:4000/logout", {}, { withCredentials: true });
+    await axios.post(`${API}/logout`, {}, { withCredentials: true });
     dispatch(logout());
   };
 

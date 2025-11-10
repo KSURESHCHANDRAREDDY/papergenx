@@ -14,11 +14,12 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/me", { withCredentials: true });
+        const res = await axios.get(`${API}/me`, { withCredentials: true });
         const user = res.data;
         dispatch(setLoginData({ user }));
         localStorage.setItem("user", JSON.stringify(user));
@@ -28,7 +29,7 @@ function App() {
       }
     };
     checkAuth();
-  }, [dispatch]);
+  }, [dispatch, API]);
 
   return (
     <BrowserRouter>
