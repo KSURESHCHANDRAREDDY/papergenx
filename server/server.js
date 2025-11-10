@@ -26,6 +26,9 @@ const dbName = process.env.DB_NAME || "papergenx";
 const db = client.db(dbName);
 const collect = db.collection("userdata");
 
+// Frontend base URL for redirects (OAuth)
+const FRONTEND = process.env.FRONTEND_URL || process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+
 // 🩺 Health route for Render sanity checks
 app.get("/", (req, res) => res.send("✅ Backend running"));
 
@@ -270,10 +273,10 @@ app.get("/auth/google/callback", async (req, res) => {
     });
 
     // Redirect back to app
-    res.redirect(FRONTEND_URL);
+    res.redirect(FRONTEND);
   } catch (err) {
     console.error("Google OAuth error:", err.response?.data || err.message);
-    res.redirect(`${FRONTEND_URL}/login?error=google_auth_failed`);
+    res.redirect(`${FRONTEND}/login?error=google_auth_failed`);
   }
 });
 
