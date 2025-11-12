@@ -11,6 +11,7 @@ PaperGenX is an AI‑powered question paper generator that creates customized as
 - **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
 - **HTTP Client**: [Axios](https://axios-http.com/)
 - **Backend Framework**: [Node.js](https://nodejs.org/) + [Express.js](https://expressjs.com/)
+- **Database**: [MongoDB]
 
 ## Features
 
